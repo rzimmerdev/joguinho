@@ -14,7 +14,7 @@ public class main {
 <<<<<<< HEAD
 	int a = 1 + 1;
 oi zimmer
-
+opa
 	
 =======
 	int a = 1 + 2;
