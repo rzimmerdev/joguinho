@@ -1,6 +1,5 @@
 package main;
 
 public class main {
-	
+	int a = 2;
 }
-718292
