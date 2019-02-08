@@ -12,7 +12,6 @@ public class main {
 =======
 <<<<<<< HEAD
 	int a = 1 + 1;
-oi zimmer
 
 	
 =======
