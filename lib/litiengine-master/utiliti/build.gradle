@@ -1,0 +1,99 @@
+plugins {
+  id 'edu.sc.seis.launch4j' version '2.4.4'
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+archivesBaseName = "utiliti"
+version = "v0.4.15-alpha"
+mainClassName = "de.gurkenlabs.utiliti.Program"
+
+sourceSets {
+  main.java.srcDir "src"
+  main.resources.srcDir "resources"
+  main.resources.srcDir "localization"
+}
+
+dependencies {
+  compile project(':')
+} 
+
+jar {
+  from {
+    configurations.runtime.collect {
+      it.isDirectory() ? it : zipTree(it)
+    }
+    configurations.compile.collect {
+      it.isDirectory() ? it : zipTree(it)
+    }
+  }  {
+     exclude 'META-INF/services/**'
+  }
+  
+  from('resources') { include '**/*' }
+  exclude '**/*.dll'
+  exclude '**/*.jnilib'
+  exclude '**/*.dylib'
+  exclude '**/*.so'
+  exclude 'junit**/**'
+  
+  manifest {
+    attributes 'Main-Class': 'de.gurkenlabs.utiliti.Program'
+  }
+}
+
+launch4j {
+  mainClassName = 'de.gurkenlabs.utiliti.Program'
+  icon = 'pixel-icon-utiLITI.ico'
+  outputDir = 'libs'
+  outfile = archivesBaseName + '-v0.4.15-alpha.exe'
+  companyName = 'gurkenlabs.de'
+  version = '0.4.15'
+  textVersion = '0.4.15'
+  copyright = '2017 gurkenlabs.de'
+  jvmOptions = ['-Xms256m', '-Xmx1024m']
+}
+
+task copyDistFiles(type: Copy) { 
+  def buildFolder = new File(buildDir, 'libs')
+  from('/dist/'){
+    include 'pixel-icon-utiliti.ico'
+    include 'config.properties'
+  }
+  
+  into buildFolder
+}
+
+task distZipWindows(type: Zip) {
+  group 'build'
+  from 'build/libs/'
+  include '*.exe'
+  include 'config.properties'
+
+  archiveName archivesBaseName + '-' + version + '-win.zip'
+  destinationDir(file('build/libs/'))
+}
+
+task distZipMac(type: Zip) {
+  group 'build'
+  from 'build/libs/'
+  include '*.jar'
+  include 'config.properties'
+
+  archiveName archivesBaseName + '-' + version + '-osx.zip'
+  destinationDir(file('build/libs/'))
+}
+
+task distZipLinux(type: Zip) {
+  group 'build'
+  from 'build/libs/'
+  include '*.jar'
+  include 'config.properties'
+
+  archiveName archivesBaseName + '-' + version + '-linux.zip'
+  destinationDir(file('build/libs/'))
+}
+
+build.dependsOn copyDistFiles
