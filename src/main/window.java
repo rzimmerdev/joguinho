@@ -1,5 +1,10 @@
 package main;
 
 public class window {
-	//oi
+	int a;
+	
+	public void init() {
+		a = 1;
+		
+	}
 }
